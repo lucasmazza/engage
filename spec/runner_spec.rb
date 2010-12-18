@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe Engage::Runner do
-  describe "a plain project" do
-    subject { Engage::Runner.new(["lucasmazza/engage"]) }
+  subject { Engage::Runner.new(["lucasmazza/engage"]) }
 
+  describe "a full featured project" do
+    before do
+      subject.stub(:using_bundler?) { true }
+    end
     it "clones the given github repository" do
       expect "git clone git@github.com:lucasmazza/engage.git"
       run
@@ -19,4 +22,16 @@ describe Engage::Runner do
       run
     end
   end
+  
+  describe "a project without a gemfile" do
+    before do
+      subject.stub(:using_bundler?) { false }
+    end
+
+    it "doesn't run the bundler command" do
+      dont_expect "cd engage && bundle"
+      run
+    end
+  end
+  
 end

@@ -8,6 +8,12 @@ module Helpers
     subject.stub(:system).and_return(true)
     subject.should_receive(:system).with(command)
   end
+
+  def dont_expect(command)
+    subject.stub(:system).and_return(true)
+    subject.should_not_receive(:system).with(command)
+  end
+
   
   def silenced(stream)
       begin

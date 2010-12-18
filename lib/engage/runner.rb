@@ -9,13 +9,21 @@ module Engage
     end
     
     def generate_gemset
-      gemset = name.split("/").last
-      run "rvm gemset create #{gemset}"
+      run "rvm gemset create #{project_name}"
     end
     
     def run_bundler
-      path = name.split("/").last
-      run "cd #{path} && bundle"
+      run "cd #{project_name} && bundle" if using_bundler?
+    end
+    
+    no_tasks do
+      def using_bundler?
+        File.exists?(File.join(project_name, "Gemfile"))
+      end
+      
+      def project_name
+        @project_name ||= name.split("/").last
+      end
     end
   end
 end
