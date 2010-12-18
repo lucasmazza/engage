@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    engage (0.0.1)
+    Engage (0.0.1)
       thor (~> 0.14)
 
 GEM
@@ -22,7 +22,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  Engage!
   bundler (~> 1.0)
-  engage!
   rspec (~> 2.3)
   thor (~> 0.14)

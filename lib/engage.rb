@@ -1,3 +1,4 @@
-module Engage
-  # Your code goes here...
-end
+require 'thor'
+require 'thor/group'
+
+require 'engage/runner'
