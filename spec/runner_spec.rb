@@ -34,4 +34,7 @@ describe Engage::Runner do
     end
   end
   
+  describe "a project from another git server" do
+    it "clones the repo from the selected server"
+  end
 end
