@@ -23,6 +23,11 @@ describe Engage::Runner do
         expect "cd engage && bundle"
         run
       end
+      
+      it "doesn't ask for a git source" do
+        subject.should_not_receive(:ask).with("Select the server of 'rails':")
+        run
+      end
     end
   
     context "a project without a gemfile" do
