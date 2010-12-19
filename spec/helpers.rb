@@ -4,13 +4,15 @@ module Helpers
     silenced(:stdout) { subject.invoke_all }
   end
   
-  def expect(command)
+  def stub_commands
     subject.stub(:system).and_return(true)
+  end
+  
+  def expect(command)
     subject.should_receive(:system).with(command)
   end
 
   def dont_expect(command)
-    subject.stub(:system).and_return(true)
     subject.should_not_receive(:system).with(command)
   end
 

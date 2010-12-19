@@ -5,7 +5,8 @@ module Engage
     argument :name, :optional => true, :desc => "The targeted project name"
     
     def clone_repo
-      run "git clone git@github.com:#{name}.git"
+      source = ask_for_source
+      run "git clone #{source}:#{name}.git"
     end
     
     def generate_gemset
@@ -17,6 +18,15 @@ module Engage
     end
     
     no_tasks do
+      def ask_for_source
+        return sources.first if sources.size == 1
+        say "Available git servers:"
+        sources.each_with_index do |source, index|
+          say "#{index} => #{source}"
+        end
+        sources[ask("Select the server of '#{project_name}':")]
+      end
+      
       def using_bundler?
         File.exists?(File.join(project_name, "Gemfile"))
       end
@@ -24,6 +34,11 @@ module Engage
       def project_name
         @project_name ||= name.split("/").last
       end
+      
+      def sources
+        ["git@github.com"]
+      end
+      
     end
   end
 end
