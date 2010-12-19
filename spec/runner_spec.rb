@@ -62,7 +62,15 @@ describe Engage::Runner do
   end
   
   context "Writing sources" do
-    it "accepts a partial url"
-    it "accepts a partial url and a description"
+    subject { Engage::Runner.new(["wrong"], :source => "git@acme.com") }
+    
+    it "doesn't trigger any system call" do
+      subject.should_not_receive(:system)
+      run
+    end
+    it "adds the given source to the list" do
+      run
+      subject.sources.should include("git@acme.com")
+    end
   end
 end

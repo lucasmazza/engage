@@ -3,17 +3,21 @@ module Engage
     include Thor::Actions
     
     argument :name, :optional => true, :desc => "The targeted project name"
+    class_option :source, :type => :string, :desc => "Adds the given source to the user list."
     
     def clone_repo
+      return if adding_source?
       source = ask_for_source
       run "git clone #{source}:#{name}.git"
     end
     
     def generate_gemset
+      return if adding_source?
       run "rvm gemset create #{project_name}"
     end
     
     def run_bundler
+      return if adding_source?
       run "cd #{project_name} && bundle" if using_bundler?
     end
     
@@ -37,6 +41,10 @@ module Engage
       
       def sources
         ["git@github.com"]
+      end
+      
+      def adding_source?
+        !options.source.nil?
       end
       
     end
