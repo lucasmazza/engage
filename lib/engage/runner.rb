@@ -21,7 +21,18 @@ module Engage
       run "cd #{project_name} && bundle" if using_bundler?
     end
     
+    def store
+      return unless adding_source?
+      list = sources
+      list << options.source
+      File.open(file_path, 'w') { |f| f.write(YAML.dump(list.uniq.compact)) }
+    end
+    
     no_tasks do
+      def file_path
+        File.join(ENV["HOME"], ".engage.sources")
+      end
+      
       def ask_for_source
         return sources.first if sources.size == 1
         say "Available git servers:"
@@ -40,6 +51,10 @@ module Engage
       end
       
       def sources
+        File.exists?(file_path) ? YAML.load_file(file_path) : default_sources
+      end
+      
+      def default_sources
         ["git@github.com"]
       end
       
