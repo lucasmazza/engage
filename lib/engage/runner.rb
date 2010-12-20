@@ -14,8 +14,7 @@ module Engage
     def generate_gemset
       return if adding_source?
       run "rvm gemset create #{project_name}"
-      # TODO: read current ruby version from rvm.
-      create_file "#{project_name}/.rvmrc", "rvm 1.8.7@#{project_name}"
+      create_file "#{project_name}/.rvmrc", "rvm #{rubyversion}@#{project_name}"
     end
     
     def run_bundler
@@ -62,6 +61,10 @@ module Engage
       
       def adding_source?
         !options.source.nil?
+      end
+      
+      def rubyversion
+        `#{ENV["HOME"]}/.rvm/bin/rvm-prompt v`
       end
       
     end
