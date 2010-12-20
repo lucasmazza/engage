@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "engage/version"
 
 Gem::Specification.new do |s|
-  s.name        = "Engage"
+  s.name        = "engage"
   s.version     = Engage::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Lucas Mazza"]
