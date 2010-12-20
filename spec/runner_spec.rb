@@ -18,6 +18,11 @@ describe Engage::Runner do
         expect "rvm gemset create engage"
         run
       end
+      
+      it "creates a rvmrc file on the project directory" do
+        run
+        File.exists?("engage/.rvmrc").should be_true
+      end
     
       it "runs bundler command" do
         expect "cd engage && bundle"
