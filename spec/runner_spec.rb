@@ -46,7 +46,7 @@ describe Engage::Runner do
 
       before do
         subject.stub(:sources) { ["foo@bar.com", "git@acme.com"] }
-        subject.stub(:ask) { 1 }
+        subject.stub(:ask) { "1" }
       end
       
       it "asks for the selected git source" do

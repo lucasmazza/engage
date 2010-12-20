@@ -39,7 +39,7 @@ module Engage
         sources.each_with_index do |source, index|
           say "#{index} => #{source}"
         end
-        sources[ask("Select the server of '#{project_name}':")]
+        sources[ask("Select the server of '#{project_name}':").to_i]
       end
       
       def using_bundler?
