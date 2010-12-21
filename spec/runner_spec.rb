@@ -75,17 +75,29 @@ describe Engage::Runner do
       end
     end
   end
-  
-  context "Writing sources" do
-    subject { Engage::Runner.new(["wrong"], :source => "git@acme.com") }
+  context "with the --source option" do
+
+    context "when passing a new source" do
+      subject { Engage::Runner.new(["wrong"], :source => "git@acme.com") }
+
+      it "doesn't trigger any system call" do
+        subject.should_not_receive(:system)
+        run
+      end
+      it "adds the given source to the list" do
+        run
+        subject.sources.should include("git@acme.com")
+      end
+    end
     
-    it "doesn't trigger any system call" do
-      subject.should_not_receive(:system)
-      run
+    context "when passing an already existent source" do
+      subject { Engage::Runner.new([], :source => "git@github.com") }
+
+      it "doesn't duplicate the sources" do
+        run
+        subject.should have(1).sources
+      end
     end
-    it "adds the given source to the list" do
-      run
-      subject.sources.should include("git@acme.com")
-    end
+    
   end
 end
