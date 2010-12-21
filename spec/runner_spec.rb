@@ -8,7 +8,8 @@ describe Engage::Runner do
     subject { Engage::Runner.new([""]) }
     
     it "outputs the script banner and quits" do
-      subject.should_receive(:puts).with(Engage::Runner.banner)
+      subject.should_receive(:say).with(Engage::Runner.banner)
+      subject.should_receive(:say_status).with('quitting...', 'no arguments given.', :red)
       lambda { run }.should raise_error SystemExit
     end
   end

@@ -11,7 +11,8 @@ module Engage
     
     def check_parameters
       if name.blank? && options.source.blank?
-        puts self.class.banner
+        say self.class.banner
+        say_status 'quitting...', 'no arguments given.', :red
         raise SystemExit
       end
     end
