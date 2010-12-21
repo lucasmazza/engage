@@ -26,12 +26,12 @@ module Engage
     def generate_gemset
       return if adding_source?
       run "rvm gemset create #{project_name}"
-      create_file "#{project_name}/.rvmrc", "rvm #{rubyversion}@#{project_name}"
+      create_file "#{project_name}/.rvmrc", selected_ruby
     end
     
     def run_bundler
       return if adding_source?
-      run "cd #{project_name} && bundle" if using_bundler?
+      run "cd #{project_name} && #{selected_ruby} exec bundle" if using_bundler?
     end
     
     def store
@@ -77,6 +77,10 @@ module Engage
       
       def rubyversion
         `#{ENV["HOME"]}/.rvm/bin/rvm-prompt v`.strip
+      end
+      
+      def selected_ruby
+        "rvm #{rubyversion}@#{project_name}"
       end
       
     end

@@ -36,7 +36,7 @@ describe Engage::Runner do
       end
     
       it "runs bundler command" do
-        expect "cd engage && bundle"
+        expect "cd engage && #{subject.selected_ruby} exec bundle"
         run
       end
       
@@ -52,7 +52,7 @@ describe Engage::Runner do
       end
 
       it "doesn't run the bundler command" do
-        dont_expect "cd engage && bundle"
+        dont_expect "cd engage && #{subject.selected_ruby} exec bundle"
         run
       end
     end
