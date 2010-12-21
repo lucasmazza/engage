@@ -75,7 +75,7 @@ module Engage
       end
       
       def rubyversion
-        `#{ENV["HOME"]}/.rvm/bin/rvm-prompt v`
+        `#{ENV["HOME"]}/.rvm/bin/rvm-prompt v`.strip
       end
       
     end
