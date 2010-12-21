@@ -71,7 +71,7 @@ module Engage
       end
       
       def adding_source?
-        !options.source.blank?
+        options.source.present?
       end
       
       def rubyversion
