@@ -4,6 +4,17 @@ module Engage
     
     argument :name, :optional => true, :desc => "The targeted project name"
     class_option :source, :type => :string, :desc => "Adds the given source to the user list."
+
+    def self.banner
+      "USAGE: engage [project] [options]"
+    end
+    
+    def check_parameters
+      if name.blank? && options.source.blank?
+        puts self.class.banner
+        raise SystemExit
+      end
+    end
     
     def clone_repo
       return if adding_source?
@@ -60,7 +71,7 @@ module Engage
       end
       
       def adding_source?
-        !options.source.nil?
+        !options.source.blank?
       end
       
       def rubyversion

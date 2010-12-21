@@ -3,6 +3,16 @@ require 'spec_helper'
 describe Engage::Runner do
   subject { Engage::Runner.new(["lucasmazza/engage"]) }
   before { stub_commands }
+  
+  context "without parameters" do
+    subject { Engage::Runner.new([""]) }
+    
+    it "outputs the script banner and quits" do
+      subject.should_receive(:puts).with(Engage::Runner.banner)
+      lambda { run }.should raise_error SystemExit
+    end
+  end
+  
   context "Starting projects" do
 
     context "a full featured project" do
