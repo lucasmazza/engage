@@ -15,7 +15,7 @@ Engage aims to provide a single command to run all those tasks. All you need to 
 ### Usage
 First, you can set your common git servers - the default list include only `git@github.com`.
 
-    engage --sources git@git.acme.com
+    engage --source git@git.acme.com
 
 After that you can start a project by just running:
 
