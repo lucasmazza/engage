@@ -6,7 +6,7 @@ module Engage
     class_option :source, :type => :string, :desc => "Adds the given source to the user list."
 
     def self.banner
-      "USAGE: engage [project] [options]"
+      "USAGE: engage [project] [--source SOURCE]"
     end
     
     def check_parameters
@@ -76,7 +76,7 @@ module Engage
       end
       
       def rubyversion
-        `#{ENV["HOME"]}/.rvm/bin/rvm-prompt v`.strip
+        `rvm-prompt v`.strip
       end
       
       def selected_ruby
