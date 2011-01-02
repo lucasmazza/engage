@@ -3,7 +3,7 @@ module Engage
     include Thor::Actions
     
     argument :name, :optional => true, :desc => "The targeted project name"
-    class_option :source, :type => :string, :desc => "Adds the given source to the user list."
+    class_option :source, :type => :string, :desc => "Adds the given source to the user list.", :aliases => '-s'
 
     def self.banner
       "USAGE: engage [project] [--source SOURCE]"
