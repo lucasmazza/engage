@@ -34,6 +34,11 @@ describe Engage::Runner do
         run
         File.exists?("engage/.rvmrc").should be_true
       end
+      
+      it "trusts the created rvmrc file" do
+        expect "rvm rvmrc trust engage"
+        run
+      end
     
       it "runs bundler command" do
         expect "cd engage && #{subject.selected_ruby} exec bundle"

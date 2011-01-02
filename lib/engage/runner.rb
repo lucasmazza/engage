@@ -27,6 +27,7 @@ module Engage
       return if adding_source?
       run "rvm gemset create #{project_name}"
       create_file "#{project_name}/.rvmrc", selected_ruby
+      run "rvm rvmrc trust #{project_name}"
     end
     
     def run_bundler
