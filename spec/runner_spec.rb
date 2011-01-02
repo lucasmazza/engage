@@ -85,9 +85,15 @@ describe Engage::Runner do
         subject.should_not_receive(:system)
         run
       end
+
       it "adds the given source to the list" do
         run
         subject.sources.should include("git@acme.com")
+      end
+      
+      it "outputs the added source" do
+        subject.should_receive(:say_status).with('added source', 'git@acme.com', :green)
+        run
       end
     end
     

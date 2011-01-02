@@ -39,6 +39,7 @@ module Engage
       list = sources
       list << options.source
       File.open(file_path, 'w') { |f| f.write(YAML.dump(list.uniq.compact)) }
+      say_status 'added source', options.source, :green
     end
     
     no_tasks do
