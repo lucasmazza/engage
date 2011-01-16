@@ -56,6 +56,7 @@ describe Engage::Runner do
     context "when there's more than one available source" do
       before do
         subject.add('git@omgwtfbbq.com')
+        subject.stub(:ask) { 1 }
       end
 
       it "outputs the available sources" do
@@ -69,7 +70,6 @@ describe Engage::Runner do
       end
 
       it "clones from the selected source" do
-        subject.stub(:ask) { 1 }
         expect_command "git clone git@omgwtfbbq.com:rails/rails.git"
         subject.init('rails/rails')
       end
