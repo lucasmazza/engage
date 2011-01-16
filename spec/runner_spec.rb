@@ -1,115 +1,115 @@
 require 'spec_helper'
 
 describe Engage::Runner do
-  subject { Engage::Runner.new(["lucasmazza/engage"]) }
   before { stub_commands }
-  
-  context "without parameters" do
-    subject { Engage::Runner.new([""]) }
-    
-    it "outputs the script banner and quits" do
-      subject.should_receive(:say).with(Engage::Runner.banner)
-      subject.should_receive(:say_status).with('quitting...', 'no arguments given.', :red)
-      lambda { run }.should raise_error SystemExit
-    end
-  end
-  
-  context "Starting projects" do
 
-    context "a full featured project" do
+  describe "#init" do
+    context "with a full featured project" do
       before do
         subject.stub(:using_bundler?) { true }
       end
-      it "clones the given github repository" do
-        expect "git clone git@github.com:lucasmazza/engage.git"
-        run
+
+      it "clones the git repository" do
+        expect_command "git clone git@github.com:lucasmazza/engage.git"
+        subject.init('lucasmazza/engage')
       end
-    
-      it "creates a gemset based on the project name" do
-        expect "rvm gemset create engage"
-        run
+
+      it "creates a gemset with the project name" do
+        expect_command "rvm gemset create engage"
+        subject.init('lucasmazza/engage')
       end
-      
-      it "creates a rvmrc file on the project directory" do
-        run
-        File.exists?("engage/.rvmrc").should be_true
+
+      it "creates a `.rvmrc` file" do
+        subject.init('cyberdyne/skynet')
+        File.exists?("skynet/.rvmrc").should be_true
       end
-      
-      it "trusts the created rvmrc file" do
-        expect "rvm rvmrc trust engage"
-        run
+
+      it "trusts the created `.rvmrc` file" do
+        expect_command "rvm rvmrc trust skynet"
+        subject.init("cyberdyne/skynet")
       end
-    
-      it "runs bundler command" do
-        expect "cd engage && #{subject.selected_ruby} exec bundle"
-        run
-      end
-      
-      it "doesn't ask for a git source" do
-        subject.should_not_receive(:ask).with("Select the server of 'rails':")
-        run
+
+      it "runs the `bundle` command" do
+        expect_command "cd skynet && rvm 1.8.7@skynet exec bundle"
+        subject.init("cyberdyne/skynet")
       end
     end
-  
+
     context "a project without a gemfile" do
       before do
         subject.stub(:using_bundler?) { false }
       end
 
-      it "doesn't run the bundler command" do
-        dont_expect "cd engage && #{subject.selected_ruby} exec bundle"
-        run
+      it "doesn't run the `bundle` command" do
+        dont_expect_command "cd oldapp && rvm 1.8.7@oldapp exec bundle"
+        subject.init('oldstuff/oldapp')
       end
     end
-  
-    context "a project from another git server" do
-      subject { Engage::Runner.new(["random_company_project"]) }
 
+    context "when there's only one available source" do
+      it "doesn't ask the user to select a source" do
+        subject.should_not_receive(:ask).with("Select the git source of 'rails':")
+        subject.init("rails/rails")
+      end
+    end
+
+    context "when there's more than one available source" do
       before do
-        subject.stub(:sources) { ["foo@bar.com", "git@acme.com"] }
-        subject.stub(:ask) { "1" }
-      end
-      
-      it "asks for the selected git source" do
-        subject.should_receive(:ask).with("Select the server of 'random_company_project':")
-        run
+        subject.add('git@omgwtfbbq.com')
       end
 
-      it "clones the repo from the selected server" do
-        expect "git clone git@acme.com:random_company_project.git"
-        run
+      it "outputs the available sources" do
+        subject.should_receive(:list)
+        subject.init('rails/rails')
+      end
+
+      it "asks the user to select one source" do
+        subject.should_receive(:ask).with("Select the git source of 'rails':")
+        subject.init('rails/rails')
+      end
+
+      it "clones from the selected source" do
+        subject.stub(:ask) { 1 }
+        expect_command "git clone git@omgwtfbbq.com:rails/rails.git"
+        subject.init('rails/rails')
       end
     end
   end
-  context "with the --source option" do
 
-    context "when passing a new source" do
-      subject { Engage::Runner.new(["wrong"], :source => "git@acme.com") }
+  describe "#list" do
+    it "prints a banner" do
+      subject.should_receive(:say).with('Available sources:')
+      subject.list
+    end
 
-      it "doesn't trigger any system call" do
-        subject.should_not_receive(:system)
-        run
+    it "outputs all the registered sources" do
+      subject.should_receive(:print_table)
+      subject.list
+    end
+  end
+
+  describe "#add" do
+    context "when the source isn't registered" do
+      it "registers the given source" do
+        expect { subject.add("git@acme.com") }.to change(subject, :sources)
       end
 
-      it "adds the given source to the list" do
-        run
-        subject.sources.should include("git@acme.com")
-      end
-      
-      it "outputs the added source" do
+      it "outputs a confirmation message" do
         subject.should_receive(:say_status).with('added source', 'git@acme.com', :green)
-        run
+        subject.add("git@acme.com")
       end
     end
-    
-    context "when passing an already existent source" do
-      subject { Engage::Runner.new([], :source => "git@github.com") }
 
-      it "doesn't duplicate the sources" do
-        run
-        subject.should have(1).sources
+    context "when the source is duplicate" do
+      before { subject.add("git@mycompany.com") }
+      it "doesn't register the given source" do
+        expect { subject.add("git@mycompany.com") }.to_not change(subject, :sources)
+      end
+
+      it "outputs a warnning message" do
+        subject.should_receive(:say_status).with('duplicate', 'git@mycompany.com', :red)
+        subject.add("git@mycompany.com")
       end
     end
-    
   end
 end

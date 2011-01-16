@@ -7,5 +7,8 @@ require 'helpers'
 RSpec.configure do |config|
   config.include Helpers
   config.include FakeFS::SpecHelpers
-end
 
+  config.around(:each) do |example|
+    silenced(:stdout) { example.run }
+  end
+end

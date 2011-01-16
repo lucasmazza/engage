@@ -15,15 +15,21 @@ Engage aims to provide a single command to run all those tasks. All you need to 
 ### Usage
 First, you can set your common git servers - the default list include only `git@github.com`.
 
-    engage --source git@git.acme.com
+    engage add git@git.acme.com
 
 After that you can start a project by just running:
 
-    engage some_project
+    engage init some_project
 
-Behind the curtains, engage will: 
+Behind the curtains, engage will:
 
 * Prompt the git server to use - either "github.com" or "acme.com";
 * Clone the some_project repository form the selected server - `git@git.acme.com/some_project.git`;
 * Create a gemset name `some_project` and a .rvmrc file;
 * Run bundler to install all the dependencies.
+
+### Available Commands
+
+    engage init [PROJECT]  # init a new project from one of the registered sources
+    engage add [SOURCE]    # register the given source to `~/.engage.sources`
+    engage list            # list all the registered sources
