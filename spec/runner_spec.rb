@@ -30,7 +30,7 @@ describe Engage::Runner do
       end
 
       it "runs the `bundle` command" do
-        expect_command "cd skynet && rvm 1.8.7@skynet exec bundle"
+        expect_command "cd skynet && rvm #{RUBY_VERSION}@skynet exec bundle"
         subject.init("cyberdyne/skynet")
       end
     end

@@ -38,11 +38,7 @@ module Engage
     end
 
     def rvm_env
-      "rvm #{current_ruby}@#{folder_name}"
-    end
-
-    def current_ruby
-      `rvm-prompt v`.strip
+      "rvm #{RUBY_VERSION}@#{folder_name}"
     end
 
     def using_bundler?
