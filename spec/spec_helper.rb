@@ -1,4 +1,6 @@
-require 'rubygems'
+require 'simplecov'
+SimpleCov.start
+
 require 'fakefs/spec_helpers'
 $:.push File.expand_path("../lib", __FILE__)
 require 'engage'
