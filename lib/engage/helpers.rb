@@ -1,10 +1,6 @@
 module Engage
   module Helpers
 
-    def folder_name
-      project.split("/").last
-    end
-
     def file_path
       File.join(ENV["HOME"], ".engage.sources")
     end

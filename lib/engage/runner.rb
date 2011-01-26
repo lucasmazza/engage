@@ -6,11 +6,12 @@ module Engage
     include Engage::Actions
     include Engage::Helpers
 
-    attr_accessor :project
+    attr_accessor :project, :target_folder
 
-    desc "init [PROJECT]", "init a new project from one of the registered sources"
-    def init(project)
+    desc "init [PROJECT] [DIRECTORY]", "init a new project from one of the registered sources"
+    def init(project, dir = nil)
       self.project = project
+      self.target_folder = dir || project.split("/").last
       clone_repo
       setup_rvm
       run_bundler if using_bundler?

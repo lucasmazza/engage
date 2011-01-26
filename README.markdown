@@ -30,6 +30,6 @@ Behind the curtains, engage will:
 
 ### Available Commands
 
-    engage init [PROJECT]  # init a new project from one of the registered sources
-    engage add [SOURCE]    # register the given source to `~/.engage.sources`
-    engage list            # list all the registered sources
+    engage init [PROJECT] [DIRECTORY]  # init a new project from one of the registered sources
+    engage add [SOURCE]                # register the given source to `~/.engage.sources`
+    engage list                        # list all the registered sources

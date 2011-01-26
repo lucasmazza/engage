@@ -10,7 +10,7 @@ describe Engage::Runner do
       end
 
       it "clones the git repository" do
-        expect_command "git clone git@github.com:lucasmazza/engage.git"
+        expect_command "git clone git@github.com:lucasmazza/engage.git engage"
         subject.init('lucasmazza/engage')
       end
 
@@ -70,8 +70,31 @@ describe Engage::Runner do
       end
 
       it "clones from the selected source" do
-        expect_command "git clone git@omgwtfbbq.com:rails/rails.git"
+        expect_command "git clone git@omgwtfbbq.com:rails/rails.git rails"
         subject.init('rails/rails')
+      end
+    end
+
+    context "when we're pointing to another directory to use" do
+      before do
+        subject.stub(:using_bundler?) { true }
+      end
+
+      it "clones to the given directory" do
+        expect_command "git clone git@github.com:rails/rails.git zomg_rails"
+        subject.init('rails/rails', 'zomg_rails')
+      end
+      it "creates a `.rvmrc` file inside the given directory" do
+        expect_command "rvm gemset create zomg_rails"
+        subject.init('rails/rails', 'zomg_rails')
+      end
+      it "trusts the created `.rvmrc` inside the given directory" do
+        expect_command "rvm rvmrc trust zomg_rails"
+        subject.init('rails/rails', 'zomg_rails')
+      end
+      it "runs the `bundle` command on the given directory" do
+        expect_command "cd zomg_rails && rvm #{RUBY_VERSION}@zomg_rails exec bundle"
+        subject.init('rails/rails', 'zomg_rails')
       end
     end
   end
