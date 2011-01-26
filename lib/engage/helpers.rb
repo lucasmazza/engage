@@ -14,7 +14,7 @@ module Engage
     end
 
     def sources_table
-      sources.each_with_index.map { |line| line.reverse }
+      sources.each_with_index.to_a.map { |line| line.reverse }
     end
 
     def default_sources
